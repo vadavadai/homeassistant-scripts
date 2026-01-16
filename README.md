@@ -7,13 +7,13 @@
 ### 1. Після встановлення чистого Debian запустіть:
 
 ```bash
-wget -O - https://raw.githubusercontent.com/YOUR_USERNAME/homeassistant-scripts/main/auto_deploy.sh | bash
+wget -O - https://raw.githubusercontent.com/vadavadai/homeassistant-scripts/main/auto_deploy.sh | bash
 ```
 
 ### 2. Пост-налаштування:
 
 ```bash
-wget -O /root/post_setup.sh https://raw.githubusercontent.com/YOUR_USERNAME/homeassistant-scripts/main/post_setup.sh
+wget -O /root/post_setup.sh https://raw.githubusercontent.com/vadavadai/homeassistant-scripts/main/post_setup.sh
 chmod +x /root/post_setup.sh
 /root/post_setup.sh
 ```
@@ -42,15 +42,15 @@ chmod +x /root/post_setup.sh
 
 ```bash
 # Основне розгортання
-wget https://raw.githubusercontent.com/YOUR_USERNAME/homeassistant-scripts/main/auto_deploy.sh
+wget https://raw.githubusercontent.com/vadavadai/homeassistant-scripts/main/auto_deploy.sh
 chmod +x auto_deploy.sh
 ./auto_deploy.sh
 
 # Додаткові скрипти
-wget https://raw.githubusercontent.com/YOUR_USERNAME/homeassistant-scripts/main/full_backup.sh
-wget https://raw.githubusercontent.com/YOUR_USERNAME/homeassistant-scripts/main/setup_gdrive.sh
-wget https://raw.githubusercontent.com/YOUR_USERNAME/homeassistant-scripts/main/restore_from_gdrive.sh
-wget https://raw.githubusercontent.com/YOUR_USERNAME/homeassistant-scripts/main/post_setup.sh
+wget https://raw.githubusercontent.com/vadavadai/homeassistant-scripts/main/full_backup.sh
+wget https://raw.githubusercontent.com/vadavadai/homeassistant-scripts/main/setup_gdrive.sh
+wget https://raw.githubusercontent.com/vadavadai/homeassistant-scripts/main/restore_from_gdrive.sh
+wget https://raw.githubusercontent.com/vadavadai/homeassistant-scripts/main/post_setup.sh
 
 chmod +x *.sh
 ```

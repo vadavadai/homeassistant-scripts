@@ -148,8 +148,8 @@ fi
 # 11. СТВОРЕННЯ ТА ЗАВАНТАЖЕННЯ СКРИПТІВ БЕКАПУ
 log_info "Завантаження та налаштування скриптів бекапу..."
 
-# Базовий URL для скриптів (замініть YOUR_USERNAME на ваш GitHub username)
-GITHUB_BASE="https://raw.githubusercontent.com/YOUR_USERNAME/homeassistant-scripts/main"
+# Базовий URL для скриптів
+GITHUB_BASE="https://raw.githubusercontent.com/vadavadai/homeassistant-scripts/main"
 
 # Завантажуємо скрипти з GitHub
 wget -q "${GITHUB_BASE}/full_backup.sh" -O /root/full_backup.sh
