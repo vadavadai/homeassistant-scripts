@@ -1,0 +1,19 @@
+# Лог файли
+*.log
+
+# Тимчасові файли
+*.tmp
+*.temp
+
+# Конфіденційні дані
+*credentials*
+*token*
+*secret*
+
+# Бекапи
+*.tar.gz
+backup_*
+
+# Системні файли
+.DS_Store
+Thumbs.db
