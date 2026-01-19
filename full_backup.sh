@@ -2,9 +2,9 @@
 
 # Повний бекап Home Assistant + Matter + система + Google Drive
 DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_DIR="/opt/backups"
+BACKUP_DIR="/opt/homeassistant/full-backups"
 BACKUP_NAME="full_backup_${DATE}"
-GDRIVE_REMOTE="gdrive"  # Назва rclone remote для Google Drive
+GDRIVE_REMOTE="vadagooga"  # Назва rclone remote для Google Drive
 GDRIVE_PATH="HomeAssistant_Backups"  # Папка на Google Drive
 
 echo "🚀 Створення повного бекапу: $BACKUP_NAME"
@@ -47,10 +47,14 @@ cat /etc/resolv.conf > $BACKUP_DIR/${BACKUP_NAME}_dns_config.txt 2>/dev/null || 
 
 # 8. Створення загального архіву
 echo "📦 Створення фінального архіву..."
-tar -czf $BACKUP_DIR/${BACKUP_NAME}_FULL.tar.gz -C $BACKUP_DIR ${BACKUP_NAME}_*
+cd $BACKUP_DIR && tar -czf ${BACKUP_NAME}_FULL.tar.gz ${BACKUP_NAME}_*
 
-# Очищення тимчасових файлів
-rm -f $BACKUP_DIR/${BACKUP_NAME}_*.tar.gz $BACKUP_DIR/${BACKUP_NAME}_*.txt $BACKUP_DIR/${BACKUP_NAME}_*.service
+# Очищення тимчасових файлів (але не фінального архіву)
+rm -f $BACKUP_DIR/${BACKUP_NAME}_ha_config.tar.gz
+rm -f $BACKUP_DIR/${BACKUP_NAME}_matter.tar.gz  
+rm -f $BACKUP_DIR/${BACKUP_NAME}_cloudflared.tar.gz
+rm -f $BACKUP_DIR/${BACKUP_NAME}_*.txt
+rm -f $BACKUP_DIR/${BACKUP_NAME}_*.service
 
 echo "✅ Повний бекап створено: $BACKUP_DIR/${BACKUP_NAME}_FULL.tar.gz"
 echo "📊 Розмір бекапу:"
@@ -63,9 +67,12 @@ if rclone listremotes | grep -q "^${GDRIVE_REMOTE}:$"; then
     if [ $? -eq 0 ]; then
         echo "✅ Бекап успішно завантажено на Google Drive!"
         
-        # Видаляємо старі бекапи з Google Drive (більше 14 днів)
+        # Видаляємо старі бекапи з Google Drive (залишаємо тільки 3 останні)
         echo "🧹 Очищення старих бекапів з Google Drive..."
-        rclone delete ${GDRIVE_REMOTE}:${GDRIVE_PATH}/ --min-age 14d --include "full_backup_*_FULL.tar.gz"
+        rclone lsf ${GDRIVE_REMOTE}:${GDRIVE_PATH}/ --include "full_backup_*_FULL.tar.gz" | sort -r | tail -n +4 | while read file; do
+            echo "🗑️ Видаляємо старий бекап: $file"
+            rclone delete ${GDRIVE_REMOTE}:${GDRIVE_PATH}/$file
+        done
     else
         echo "❌ Помилка завантаження на Google Drive!"
     fi
@@ -74,7 +81,7 @@ else
     echo "   Запустіть: rclone config"
 fi
 
-# Видаляємо локальні старі бекапи (більше 7 днів)
-find $BACKUP_DIR -name "full_backup_*_FULL.tar.gz" -mtime +7 -delete 2>/dev/null || true
+# Видаляємо локальні старі бекапи (залишаємо тільки 3 останні)
+find $BACKUP_DIR -name "full_backup_*_FULL.tar.gz" -type f | sort -r | tail -n +4 | xargs rm -f 2>/dev/null || true
 
 echo "🎉 Бекап завершено!"
